@@ -28,10 +28,10 @@ thead.addEventListener('click', (e) => {
   let sortDirection = null;
 
   if (currentSort[theadIndex] || currentSort[theadIndex] === null) {
-    if (
-      currentSort[theadIndex] === 'desc' ||
-      currentSort[theadIndex] === null
-    ) {
+    if (currentSort[theadIndex] === null) {
+      currentSort[theadIndex] = 'asc';
+      sortDirection = 'asc';
+    } else if (currentSort[theadIndex] === 'desc') {
       currentSort[theadIndex] = 'asc';
       sortDirection = 'asc';
     } else if (currentSort[theadIndex] === 'asc') {
@@ -39,6 +39,13 @@ thead.addEventListener('click', (e) => {
       sortDirection = 'desc';
     }
   }
+
+  // Reset other columns sort state
+  Object.keys(currentSort).forEach((key) => {
+    if (Number(key) !== theadIndex) {
+      currentSort[key] = null;
+    }
+  });
 
   const rows = Array.from(tbody.querySelectorAll('tr'));
   const isNum = (v) => v !== '' && !Number.isNaN(parseFloat(v)) && isFinite(v);
@@ -147,10 +154,7 @@ window.addEventListener('load', () => {
       return;
     }
 
-    if (
-      Number(formData.get('age')) < 18 ||
-      Number(formData.get('salary')) < 90
-    ) {
+    if (Number(formData.get('age')) < 18 || Number(formData.get('age')) > 90) {
       pushNotification(
         10,
         10,
@@ -226,6 +230,13 @@ tbody.addEventListener('dblclick', (e) => {
   const targetCell = e.target;
   const originalValue = targetCell.textContent;
   const input = document.createElement('input');
+
+  const allCellInputs = tbody.querySelectorAll('.cell-input');
+
+  allCellInputs.forEach((cellInput) => {
+    cellInput.remove();
+    cellInput.parentElement.textContent = originalValue;
+  });
 
   input.type = 'text';
   input.classList.add('cell-input');

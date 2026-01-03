@@ -159,7 +159,7 @@ window.addEventListener('load', () => {
         10,
         10,
         'Error',
-        'Age must be at least 18 and salary at least 90',
+        'Age must be at least 18 and age at most 90',
         'error',
       );
       employeesForm.reset();
@@ -181,7 +181,14 @@ window.addEventListener('load', () => {
     tbody.appendChild(newRow);
 
     employeesForm.reset();
-    pushNotification(10, 10, 'Success', 'Form loaded', 'success');
+
+    pushNotification(
+      10,
+      10,
+      'Success',
+      'New employee added successfully',
+      'success',
+    );
   });
 
   document.body.appendChild(employeesForm);
